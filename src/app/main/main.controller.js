@@ -1,9 +1,9 @@
-(function() {
+(function () {
   'use strict';
 
   angular
-  .module('angularTemplateProject')
-  .controller('MainController', MainController);
+    .module('angularTemplateProject')
+    .controller('MainController', MainController);
 
   /** @ngInject */
   function MainController() {
@@ -12,101 +12,144 @@
 
 })();
 
-
-
 var app = angular.module('angularTemplateProject');
 
-app.controller('MainCtrl', function($scope) {
-  $scope.options = {
+app.controller('MainCtrl', function ($scope) {
+  Highcharts.chart('tempcontainer', {
+
     chart: {
-      type: 'lineChart',
-      height: 450,
-      margin : {
-        top: 20,
-        right: 20,
-        bottom: 40,
-        left: 55
-      },
-      x: function(d){ return d.x; },
-      y: function(d){ return d.y; },
-      useInteractiveGuideline: true,
-      dispatch: {
-        stateChange: function(e){ console.log("stateChange"); },
-        changeState: function(e){ console.log("changeState"); },
-        tooltipShow: function(e){ console.log("tooltipShow"); },
-        tooltipHide: function(e){ console.log("tooltipHide"); }
-      },
-      xAxis: {
-        axisLabel: 'Time (ms)'
-      },
-      yAxis: {
-        axisLabel: 'Voltage (v)',
-        tickFormat: function(d){
-          return d3.format('.02f')(d);
-        },
-        axisLabelDistance: -10
-      },
-      callback: function(chart){
-        console.log("!!! lineChart callback !!!");
-      }
+      zoomType: 'xy'
     },
     title: {
-      enable: true,
-      text: 'Title for Line Chart'
+      text: '월 구매 유저'
     },
-    subtitle: {
-      enable: true,
-      text: 'Subtitle for simple line chart. Lorem ipsum dolor sit amet, at eam blandit sadipscing, vim adhuc sanctus disputando ex, cu usu affert alienum urbanitas.',
-      css: {
-        'text-align': 'center',
-        'margin': '10px 13px 0px 7px'
+    xAxis:
+    [
+      {
+        categories: ['1월', '2월', '3월', '4월'],
+        crosshair: true
+      }
+    ],
+
+    yAxis: [
+      { // Primary yAxis
+        labels: {
+          format: '{value}%',
+          style: {
+            color: Highcharts.getOptions().colors[1]
+          }
+        },
+        title: {
+          text: 'Percentage',
+          style: {
+            color: Highcharts.getOptions().colors[1]
+          }
+        }
+      },
+      { // Secondary yAxis
+        title: {
+          text: 'User',
+          style: {
+            color: Highcharts.getOptions().colors[0]
+          }
+        },
+        labels: {
+          format: '{value} 명',
+          style: {
+            color: Highcharts.getOptions().colors[0]
+          }
+        },
+        opposite: true
+      }
+    ],
+    tooltip: {
+      shared: true
+    },
+    plotOptions: {
+      column: {
+        stacking: 'percent',
+        datalabes: {
+          enabled: true,
+          allowOverlap: true
+        }
+      },
+      series: {
+
       }
     },
-    caption: {
-      enable: true,
-      html: '<b>Figure 1.</b> Lorem ipsum dolor sit amet, at eam blandit sadipscing, <span style="text-decoration: underline;">vim adhuc sanctus disputando ex</span>, cu usu affert alienum urbanitas. <i>Cum in purto erat, mea ne nominavi persecuti reformidans.</i> Docendi blandit abhorreant ea has, minim tantas alterum pro eu. <span style="color: darkred;">Exerci graeci ad vix, elit tacimates ea duo</span>. Id mel eruditi fuisset. Stet vidit patrioque in pro, eum ex veri verterem abhorreant, id unum oportere intellegam nec<sup>[1, <a href="https://github.com/krispo/angular-nvd3" target="_blank">2</a>, 3]</sup>.',
-      css: {
-        'text-align': 'justify',
-        'margin': '10px 13px 0px 7px'
+    legend: {
+      layout: 'horizontal',
+      align: 'left',
+      x: 120,
+      y: 0,
+      floating: false,
+      backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+    },
+    series: [
+      {
+        name: '첫구매유저',
+        type: 'column',
+        yAxis: 0,
+        showInLegend: false,
+        data: [32094, 20193, 29154, 19179],
+        tooltip: {
+        }
+      },
+      {
+        name: '복귀구매유저',
+        type: 'column',
+        yAxis: 0,
+        showInLegend: false,
+        data: [35661, 21993, 50606, 20965],
+        tooltip: {
+        }
+      },
+      {
+        name: '연속구매유저',
+        type: 'column',
+        yAxis: 0,
+        showInLegend: false,
+        data: [129985, 120166, 117730, 103500],
+        tooltip: {
+        }
+      },
+      {
+        name: '첫구매유저',
+        type: 'line',
+        yAxis: 1,
+        marker: {
+          enabled: false
+        },
+        data: [32094, 20193, 29154, 19179],
+        tooltip: {
+          valueSuffix: ' 명'
+        }
+      },
+      {
+        name: '복귀구매유저',
+        type: 'line',
+        yAxis: 1,
+        marker: {
+          enabled: false
+        },
+        data: [35661, 21993, 50606, 20965],
+        tooltip: {
+          valueSuffix: ' 명'
+        }
+      },
+      {
+        name: '연속구매유저',
+        type: 'line',
+        yAxis: 1,
+        marker: {
+          enabled: false
+        },
+        data: [129985, 120166, 117730, 103500],
+        tooltip: {
+          valueSuffix: ' 명'
+        }
       }
-    }
-  };
+    ]
+  });
 
-  $scope.data = sinAndCos();
-
-  /*Random Data Generator */
-  function sinAndCos() {
-    var sin = [],sin2 = [],
-    cos = [];
-
-            //Data is represented as an array of {x,y} pairs.
-            for (var i = 0; i < 100; i++) {
-              sin.push({x: i, y: Math.sin(i/10)});
-              sin2.push({x: i, y: i % 10 == 5 ? null : Math.sin(i/10) *0.25 + 0.5});
-              cos.push({x: i, y: .5 * Math.cos(i/10+ 2) + Math.random() / 10});
-            }
-
-            //Line chart data should be sent as an array of series objects.
-            return [
-            {
-                    values: sin,      //values - represents the array of {x,y} data points
-                    key: 'Sine Wave', //key  - the name of the series.
-                    color: '#ff7f0e',  //color - optional: choose your own line color.
-                    strokeWidth: 2,
-                    classed: 'dashed'
-                  },
-                  {
-                    values: cos,
-                    key: 'Cosine Wave',
-                    color: '#2ca02c'
-                  },
-                  {
-                    values: sin2,
-                    key: 'Another sine wave',
-                    color: '#7777ff',
-                    area: true      //area - set to true if you want this line to turn into a filled area chart.
-                  }
-                  ];
-                };
-              });
-
+});
